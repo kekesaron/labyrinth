@@ -20,7 +20,7 @@ def open_window(win,string):
     win.addstr(0,0,string)
     while True:
         event = win.getch()
-        if (event == ord("q")):
+        if x==69 and y==14:
             break
         elif event == curses.KEY_RIGHT :
             win.addch(y,x, ' ')
