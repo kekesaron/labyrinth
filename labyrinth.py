@@ -12,6 +12,7 @@ def init_coord():
     global coord_y
     coord_y=1
 
+#this function prints the map to the screen
 def show_map(maze_components,win):
     global coord_x
     global coord_y
@@ -20,6 +21,7 @@ def show_map(maze_components,win):
                 win.addch(coord_y,coord_x,maze_components[coord_y-1][coord_x])
     win.refresh()
 
+#this function loads the map from a txt file to a 2D list
 def load_map():
     maze_components=[]
     file = open("map.txt", "r")
@@ -29,79 +31,108 @@ def load_map():
     file.close()
     return maze_components
 
+#this function creates the window for the game
 def create_window(win):
-    win = curses.newwin(40, 100, 0, 0)  # Init window object
-    curses.noecho()             # Disable default printing of inputs
-    curses.curs_set(0)          # Hiding cursor visibility
-    win.keypad(1)               # enable processing of functional keys by curses (ex. arrow keys)
+    win = curses.newwin(40, 100, 0, 0)
+    curses.noecho()
+    curses.curs_set(0)
+    win.keypad(1)
     win.nodelay(1)
     return win
 
-def moving(win,maze_components):
+'''this function handles the when the user wants to move left, and also the score
+system'''
+def moving_left(win,maze_components):
     global score
     global coord_x
     global coord_y
+    if maze_components[coord_y-1][coord_x-1]=='X':
+        score=score+10
+        pass
+    else:
+        score=score+1
+        win.addch(coord_y,coord_x, ' ')
+        win.addch(coord_y,coord_x-1, 'O')
+        coord_x=coord_x-1
+        win.refresh()
+
+'''this function handles the when the user wants to move right, and also the score
+system'''
+def moving_right(win,maze_components):
+    global score
+    global coord_x
+    global coord_y
+    if maze_components[coord_y-1][coord_x+1]=='X':
+        score=score+10
+        pass
+    else:
+        score=score+1
+        win.addch(coord_y,coord_x, ' ')
+        win.addch(coord_y,coord_x+1, 'O')
+        coord_x=coord_x+1
+        win.refresh()
+
+'''this function handles the when the user wants to move up, and also the score
+system'''
+def moving_up(win,maze_components):
+    global score
+    global coord_x
+    global coord_y
+    if maze_components[coord_y-2][coord_x]=='X':
+        score=score+10
+        pass
+    else:
+        score=score+1
+        win.addch(coord_y,coord_x, ' ')
+        win.addch(coord_y-1,coord_x, 'O')
+        coord_y=coord_y-1
+        win.refresh()
+
+'''this function handles the when the user wants to move down, and also the score
+system'''
+def moving_down(win,maze_components):
+    global score
+    global coord_x
+    global coord_y
+    if maze_components[coord_y][coord_x]=='X':
+        score=score+10
+        pass
+    else:
+        score=score+1
+        win.addch(coord_y,coord_x, ' ')
+        win.addch(coord_y+1,coord_x, 'O')
+        coord_y=coord_y+1
+        win.refresh()
+
+"""the main function calls the other functions in the right sequence and this
+function contains also the logic for moving"""
+def main():
+    lab_components = load_map()
+    win = curses.initscr()
+    win = create_window(win)
+    show_map(lab_components,win)
     init_coord()
     while True:
         win.addch(coord_y,coord_x, 'O')
         win.addstr(22,2, 'Score : ' + str(score) + ' ')
-        if coord_x==69 and coord_y==13:
+        if coord_x == 69 and coord_y == 13:
             break
         event = win.getch()
         if event == ord ("q"):
             break
-        elif event == curses.KEY_RIGHT :
-            score=score+1
-            if maze_components[coord_y-1][coord_x+1]=='X':
-                score=score+9
-                pass
-            else:
-                win.addch(coord_y,coord_x, ' ')
-                win.addch(coord_y,coord_x+1, 'O')
-                coord_x=coord_x+1
-                win.refresh()
         elif event == curses.KEY_LEFT :
-            score=score+1
-            if maze_components[coord_y-1][coord_x-1]=='X':
-                score=score+9
-                pass
-            else:
-                win.addch(coord_y,coord_x, ' ')
-                win.addch(coord_y,coord_x-1, 'O')
-                coord_x=coord_x-1
-                win.refresh()
-        elif event == curses.KEY_DOWN :
-            score=score+1
-            if maze_components[coord_y][coord_x]=='X':
-                score=score+9
-                pass
-            else:
-                win.addch(coord_y,coord_x, ' ')
-                win.addch(coord_y+1,coord_x, 'O')
-                coord_y=coord_y+1
-                win.refresh()
+            moving_left(win,lab_components)
+        elif event == curses.KEY_RIGHT :
+            moving_right(win,lab_components)
         elif event == curses.KEY_UP :
-            score=score+1
-            if maze_components[coord_y-2][coord_x]=='X':
-                score=score+9
-                pass
-            else:
-                win.addch(coord_y,coord_x, ' ')
-                win.addch(coord_y-1,coord_x, 'O')
-                coord_y=coord_y-1
-                win.refresh()
-    win=curses.initscr()
+            moving_up(win,lab_components)
+        elif event == curses.KEY_DOWN :
+            moving_down(win,lab_components)
+    win = curses.initscr()
     win.clear()
     print("you score: "+str(score))
     time.sleep(3)
     curses.endwin()
-
-def main():
-    maze_components=load_map()
-    win = curses.initscr()
-    win = create_window(win)
-    show_map(maze_components,win)
-    moving(win,maze_components)
 
 if __name__ == "__main__":
     main()
