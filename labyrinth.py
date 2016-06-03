@@ -9,23 +9,13 @@ fogy = 3
 score = 0
 fogx_start = 0
 fogy_start = 0
-last_move_x = 0
 
-
-def init_coord():
-    global coord_x
-    coord_x = 1
-    global coord_y
-    coord_y = 1
-
-
-def show_map(maze_components, win):
-    global coord_x
-    global coord_y
-    for coord_y in range(0, 20):
-        for coord_x in range(-1, 70):
-            # win.addch(coord_y, coord_x, maze_components[coord_y-1][coord_x])
-            win.refresh()
+# def score_eval():
+#     global score
+#     evalu =""
+#     if score >> 500:
+#         evalu = "You are less, than Hodor"
+#     #elif score << 500 and score >>
 
 
 # this function loads the map from a txt file to a 2D list
@@ -59,17 +49,17 @@ def moving_left(win, maze_components):
     global fogy
     global fogx_start
     global fogy_start
-    if maze_components[coord_y-1][coord_x-1] == 'X':
-        score = score+10
+    if maze_components[coord_y-1][coord_x-1] == 'X': #compare the next coord is wall or not
+        score = score+10 # if its wall and u still pressed the key you get +10 point
         pass
     else:
-        score = score+1
-        win.addch(coord_y, coord_x, ' ')
-        win.addch(coord_y, coord_x-1, 'O')
-        coord_x = coord_x-1
-        fogx = fogx - 1
-        fogx_start = fogx_start - 1
-        for i in range(fogy_start, fogy):
+        score = score+1 # if u move to a free space u get just 1 point
+        win.addch(coord_y, coord_x, ' ')# write a simple space for our character's last position
+        win.addch(coord_y, coord_x-1, 'O')# and write O to the next space
+        coord_x = coord_x-1 # change the character's position
+        fogx = fogx - 1 # it's set our fog of war max value so our print will run until this value
+        fogx_start = fogx_start - 1# the fog of war print will start from this value
+        for i in range(fogy_start, fogy): # we add the labyrinth elements to the screen from our list
             for j in range(fogx_start, fogx):
                 win.addch(i, j, maze_components[i-1][j])
         win.refresh()
@@ -138,7 +128,7 @@ def moving_down(win, maze_components):
         pass
     else:
         win.addch(coord_y, coord_x, ' ')
-        win.addch(coord_y+1, coord_x, 'O')
+        win.addch(coord_y+1, coord_x, 'O', curses.color_pair(1))
         fogy = fogy + 1
         coord_y = coord_y+1
         for i in range(fogy_start, fogy):
@@ -152,8 +142,9 @@ def main():
     lab_components = load_map()
     win = curses.initscr()
     win = create_window(win)
-    show_map(lab_components, win)
-    init_coord()
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLUE)
+    win.bkgd(' ', curses.color_pair(1))
     while True:
         win.addch(coord_y, coord_x, 'O')
         win.addstr(22, 2, 'Score : ' + str(score) + ' ')
@@ -179,4 +170,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
