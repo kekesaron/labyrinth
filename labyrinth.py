@@ -18,7 +18,7 @@ def score_eval():
         evalu = "You are less, than Hodor"
     elif score < 500 and score > 400:
         evalu = "U still have to learn, Young padavan"
-    elif score > 400:
+    elif score < 400:
         evalu = "Give that man a medal"
     return evalu
 
@@ -148,7 +148,7 @@ def main():
     win = curses.initscr()
     win = create_window(win)
     curses.start_color()
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLUE)
+    curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
     win.bkgd(' ', curses.color_pair(1))
     while True:
         win.addch(coord_y, coord_x, 'O')
