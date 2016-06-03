@@ -54,19 +54,22 @@ def moving_left(win, maze_components):
     global fogy
     global fogx_start
     global fogy_start
-    if maze_components[coord_y-1][coord_x-1] == 'X': #compare the next coord is wall or not
-        score = score+10 # if its wall and u still pressed the key you get +10 point
+    if maze_components[coord_y - 1][coord_x - 1] == 'X':  # compare the next coord is wall or not
+        score = score + \
+            10  # if its wall and u still pressed the key you get +10 point
         pass
     else:
-        score = score+1 # if u move to a free space u get just 1 point
-        win.addch(coord_y, coord_x, ' ')# write a simple space for our character's last position
-        win.addch(coord_y, coord_x-1, 'O')# and write O to the next space
-        coord_x = coord_x-1 # change the character's position
-        fogx = fogx - 1 # it's set our fog of war max value so our print will run until this value
-        fogx_start = fogx_start - 1# the fog of war print will start from this value
-        for i in range(fogy_start, fogy): # we add the labyrinth elements to the screen from our list
+        score = score + 1  # if u move to a free space u get just 1 point
+        win.addch(coord_y, coord_x, ' ')  # write a simple space for our character's last position
+        win.addch(coord_y, coord_x - 1, 'O')  # and write O to the next space
+        coord_x = coord_x - 1  # change the character's position
+        fogx = fogx - \
+            1  # it's set our fog of war max value so our print will run until this value
+        fogx_start = fogx_start - \
+            1  # the fog of war print will start from this value
+        for i in range(fogy_start, fogy):  # we add the labyrinth elements to the screen from our list
             for j in range(fogx_start, fogx):
-                win.addch(i, j, maze_components[i-1][j])
+                win.addch(i, j, maze_components[i - 1][j])
         win.refresh()
 
 
@@ -80,18 +83,18 @@ def moving_right(win, maze_components):
     global fogy
     global fogx_start
     global fogy_start
-    if maze_components[coord_y-1][coord_x+1] == 'X':
-        score = score+10
+    if maze_components[coord_y - 1][coord_x + 1] == 'X':
+        score = score + 10
         pass
     else:
-        score = score+1
+        score = score + 1
         fogx = fogx + 1
         win.addch(coord_y, coord_x, ' ')
-        win.addch(coord_y, coord_x+1, 'O')
-        coord_x = coord_x+1
+        win.addch(coord_y, coord_x + 1, 'O')
+        coord_x = coord_x + 1
         for i in range(fogy_start, fogy):
             for j in range(fogx_start, fogx):
-                win.addch(i, j, maze_components[i-1][j])
+                win.addch(i, j, maze_components[i - 1][j])
         fogx_start = fogx_start + 1
         win.refresh()
 
@@ -104,19 +107,19 @@ def moving_up(win, maze_components):
     global fogx
     global fogx_start
     global fogy_start
-    if maze_components[coord_y-2][coord_x] == 'X':
-        score = score+10
+    if maze_components[coord_y - 2][coord_x] == 'X':
+        score = score + 10
         pass
     else:
         win.addch(coord_y, coord_x, ' ')
-        win.addch(coord_y-1, coord_x, 'O')
+        win.addch(coord_y - 1, coord_x, 'O')
         score = score - 1
         coord_y = coord_y - 1
         fogy = fogy - 1
         fogy_start = fogy_start - 1
-        for i in range(fogy_start, fogy-1):
+        for i in range(fogy_start, fogy - 1):
             for j in range(fogx_start, fogx):
-                win.addch(i, j, maze_components[i-1][j])
+                win.addch(i, j, maze_components[i - 1][j])
         win.refresh()
 
 
@@ -129,16 +132,16 @@ def moving_down(win, maze_components):
     global fogx_start
     global fogy_start
     if maze_components[coord_y][coord_x] == 'X':
-        score = score+10
+        score = score + 10
         pass
     else:
         win.addch(coord_y, coord_x, ' ')
-        win.addch(coord_y+1, coord_x, 'O', curses.color_pair(1))
+        win.addch(coord_y + 1, coord_x, 'O', curses.color_pair(1))
         fogy = fogy + 1
-        coord_y = coord_y+1
+        coord_y = coord_y + 1
         for i in range(fogy_start, fogy):
             for j in range(fogx_start, fogx):
-                win.addch(i, j, maze_components[i-1][j])
+                win.addch(i, j, maze_components[i - 1][j])
         fogy_start = fogy_start + 1
         win.refresh()
 
@@ -169,7 +172,7 @@ def main():
     evalu = score_eval()
     win = curses.initscr()
     win.clear()
-    print("you score: "+str(score)+" " + str(evalu))
+    print("you score: " + str(score) + " " + str(evalu))
     time.sleep(3)
     curses.endwin()
 
