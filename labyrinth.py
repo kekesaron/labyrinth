@@ -10,12 +10,17 @@ score = 0
 fogx_start = 0
 fogy_start = 0
 
-# def score_eval():
-#     global score
-#     evalu =""
-#     if score >> 500:
-#         evalu = "You are less, than Hodor"
-#     #elif score << 500 and score >>
+
+def score_eval():
+    global score
+    evalu = ""
+    if score > 500:
+        evalu = "You are less, than Hodor"
+    elif score < 500 and score > 400:
+        evalu = "U still have to learn, Young padavan"
+    elif score > 400:
+        evalu = "Give that man a medal"
+    return evalu
 
 
 # this function loads the map from a txt file to a 2D list
@@ -161,10 +166,10 @@ def main():
             moving_up(win, lab_components)
         elif event == curses.KEY_DOWN:
             moving_down(win, lab_components)
-
+    evalu = score_eval()
     win = curses.initscr()
     win.clear()
-    print("you score: "+str(score))
+    print("you score: "+str(score)+" " + str(evalu))
     time.sleep(3)
     curses.endwin()
 
